@@ -51,11 +51,8 @@ To get the project running on your local machine, follow these steps:
     Use your preferred package manager (npm, yarn, or pnpm).
     ```bash
     npm install
-    # or
-    yarn install
-    # or
-    pnpm install
-    ```
+  
+    
 
 3.  **Set up environment variables:**
     Create a `.env.local` file in the project root and add necessary environment variables, such as API endpoints or authentication details. Consult the project's documentation or ask the developer for required variables.
@@ -66,7 +63,7 @@ To get the project running on your local machine, follow these steps:
 
 4.  **Run the development server:**
     ```bash
-    npm run deve
+    npm run dev
    
 
 5.  **Access the application:**
