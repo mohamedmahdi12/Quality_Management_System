@@ -66,7 +66,7 @@ To get the project running on your local machine, follow these steps:
 
 4.  **Run the development server:**
     ```bash
-    npm run dev
+    npm run deve
    
 
 5.  **Access the application:**
