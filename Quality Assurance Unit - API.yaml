@@ -1,0 +1,3692 @@
+openapi: 3.0.3
+info:
+  title: Quality Assurance Unit - API
+  version: 1.0.0
+  description: API to Manage the System of the Quality Assurance Unit at Colleges.
+paths:
+  /api/academic-years/:
+    get:
+      operationId: academic_years_list
+      description: |-
+        ViewSet for AcademicYear model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by status
+        - Sort by start_date
+        - Search by start_date, end_date
+        - Pagination
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - ACTIVE
+          - ARCHIVED
+        description: |-
+          * `ARCHIVED` - Archived
+          * `ACTIVE` - Active
+      tags:
+      - academic-years
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAcademicYearList'
+          description: ''
+    post:
+      operationId: academic_years_create
+      description: |-
+        ViewSet for AcademicYear model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by status
+        - Sort by start_date
+        - Search by start_date, end_date
+        - Pagination
+      tags:
+      - academic-years
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcademicYear'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AcademicYear'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AcademicYear'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcademicYear'
+          description: ''
+  /api/academic-years/{id}/:
+    get:
+      operationId: academic_years_retrieve
+      description: |-
+        ViewSet for AcademicYear model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by status
+        - Sort by start_date
+        - Search by start_date, end_date
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Academic Year.
+        required: true
+      tags:
+      - academic-years
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcademicYear'
+          description: ''
+    put:
+      operationId: academic_years_update
+      description: |-
+        ViewSet for AcademicYear model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by status
+        - Sort by start_date
+        - Search by start_date, end_date
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Academic Year.
+        required: true
+      tags:
+      - academic-years
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcademicYear'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AcademicYear'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AcademicYear'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcademicYear'
+          description: ''
+    patch:
+      operationId: academic_years_partial_update
+      description: |-
+        ViewSet for AcademicYear model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by status
+        - Sort by start_date
+        - Search by start_date, end_date
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Academic Year.
+        required: true
+      tags:
+      - academic-years
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAcademicYear'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAcademicYear'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAcademicYear'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcademicYear'
+          description: ''
+    delete:
+      operationId: academic_years_destroy
+      description: |-
+        ViewSet for AcademicYear model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by status
+        - Sort by start_date
+        - Search by start_date, end_date
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Academic Year.
+        required: true
+      tags:
+      - academic-years
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/attachments/:
+    get:
+      operationId: attachments_list
+      description: |-
+        ViewSet for Attachment model.
+        Admin: Full CRUD operations
+        SUPERVISOR/TA: Upload/Remove if assigned to standard, Download if assigned or shared
+        Others: Read-only access
+
+        Features:
+        - Filter by element
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: query
+        name: element
+        schema:
+          type: string
+          format: uuid
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - attachments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAttachmentList'
+          description: ''
+    post:
+      operationId: attachments_create
+      description: |-
+        ViewSet for Attachment model.
+        Admin: Full CRUD operations
+        SUPERVISOR/TA: Upload/Remove if assigned to standard, Download if assigned or shared
+        Others: Read-only access
+
+        Features:
+        - Filter by element
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      tags:
+      - attachments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+  /api/attachments/{id}/:
+    get:
+      operationId: attachments_retrieve
+      description: |-
+        ViewSet for Attachment model.
+        Admin: Full CRUD operations
+        SUPERVISOR/TA: Upload/Remove if assigned to standard, Download if assigned or shared
+        Others: Read-only access
+
+        Features:
+        - Filter by element
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Attachment.
+        required: true
+      tags:
+      - attachments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+    put:
+      operationId: attachments_update
+      description: |-
+        ViewSet for Attachment model.
+        Admin: Full CRUD operations
+        SUPERVISOR/TA: Upload/Remove if assigned to standard, Download if assigned or shared
+        Others: Read-only access
+
+        Features:
+        - Filter by element
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Attachment.
+        required: true
+      tags:
+      - attachments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+    patch:
+      operationId: attachments_partial_update
+      description: |-
+        ViewSet for Attachment model.
+        Admin: Full CRUD operations
+        SUPERVISOR/TA: Upload/Remove if assigned to standard, Download if assigned or shared
+        Others: Read-only access
+
+        Features:
+        - Filter by element
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Attachment.
+        required: true
+      tags:
+      - attachments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAttachment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAttachment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAttachment'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+    delete:
+      operationId: attachments_destroy
+      description: |-
+        ViewSet for Attachment model.
+        Admin: Full CRUD operations
+        SUPERVISOR/TA: Upload/Remove if assigned to standard, Download if assigned or shared
+        Others: Read-only access
+
+        Features:
+        - Filter by element
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Attachment.
+        required: true
+      tags:
+      - attachments
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/attachments/{id}/download/:
+    get:
+      operationId: attachments_download_retrieve
+      description: |-
+        Download an attachment file.
+        Users can download if:
+        1. They are assigned to the standard, or
+        2. The attachment is shared with them, or
+        3. They are admins
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Attachment.
+        required: true
+      tags:
+      - attachments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+  /api/attachments/{id}/remove/:
+    delete:
+      operationId: attachments_remove_destroy
+      description: |-
+        Remove an attachment file.
+        Only users assigned to the standard or admins can remove.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Attachment.
+        required: true
+      tags:
+      - attachments
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/attachments/{id}/upload/:
+    post:
+      operationId: attachments_upload_create
+      description: |-
+        Upload an attachment file.
+        Only users assigned to the standard can upload.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Attachment.
+        required: true
+      tags:
+      - attachments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+  /api/course-attachments/:
+    get:
+      operationId: course_attachments_list
+      description: |-
+        ViewSet for CourseAttachment model.
+        Admin: Full CRUD operations
+        PROFESSOR: Upload/Remove/Download their own course attachments
+        Others: Read-only access
+
+        Features:
+        - Filter by course_file
+        - Sort by created_at
+        - Pagination
+      parameters:
+      - in: query
+        name: course_file
+        schema:
+          type: string
+          format: uuid
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - course-attachments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCourseAttachmentList'
+          description: ''
+    post:
+      operationId: course_attachments_create
+      description: |-
+        ViewSet for CourseAttachment model.
+        Admin: Full CRUD operations
+        PROFESSOR: Upload/Remove/Download their own course attachments
+        Others: Read-only access
+
+        Features:
+        - Filter by course_file
+        - Sort by created_at
+        - Pagination
+      tags:
+      - course-attachments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseAttachment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseAttachment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseAttachment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseAttachment'
+          description: ''
+  /api/course-attachments/{id}/:
+    get:
+      operationId: course_attachments_retrieve
+      description: |-
+        ViewSet for CourseAttachment model.
+        Admin: Full CRUD operations
+        PROFESSOR: Upload/Remove/Download their own course attachments
+        Others: Read-only access
+
+        Features:
+        - Filter by course_file
+        - Sort by created_at
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course File Attachment.
+        required: true
+      tags:
+      - course-attachments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseAttachment'
+          description: ''
+    put:
+      operationId: course_attachments_update
+      description: |-
+        ViewSet for CourseAttachment model.
+        Admin: Full CRUD operations
+        PROFESSOR: Upload/Remove/Download their own course attachments
+        Others: Read-only access
+
+        Features:
+        - Filter by course_file
+        - Sort by created_at
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course File Attachment.
+        required: true
+      tags:
+      - course-attachments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseAttachment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseAttachment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseAttachment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseAttachment'
+          description: ''
+    patch:
+      operationId: course_attachments_partial_update
+      description: |-
+        ViewSet for CourseAttachment model.
+        Admin: Full CRUD operations
+        PROFESSOR: Upload/Remove/Download their own course attachments
+        Others: Read-only access
+
+        Features:
+        - Filter by course_file
+        - Sort by created_at
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course File Attachment.
+        required: true
+      tags:
+      - course-attachments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseAttachment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseAttachment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseAttachment'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseAttachment'
+          description: ''
+    delete:
+      operationId: course_attachments_destroy
+      description: |-
+        ViewSet for CourseAttachment model.
+        Admin: Full CRUD operations
+        PROFESSOR: Upload/Remove/Download their own course attachments
+        Others: Read-only access
+
+        Features:
+        - Filter by course_file
+        - Sort by created_at
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course File Attachment.
+        required: true
+      tags:
+      - course-attachments
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/course-attachments/{id}/download/:
+    get:
+      operationId: course_attachments_download_retrieve
+      description: Download a course attachment file.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course File Attachment.
+        required: true
+      tags:
+      - course-attachments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseAttachment'
+          description: ''
+  /api/course-files/:
+    get:
+      operationId: course_files_list
+      description: |-
+        ViewSet for CourseFile model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by course
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: query
+        name: course
+        schema:
+          type: string
+          format: uuid
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - course-files
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCourseFileList'
+          description: ''
+    post:
+      operationId: course_files_create
+      description: |-
+        ViewSet for CourseFile model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by course
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      tags:
+      - course-files
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseFile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseFile'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseFile'
+          description: ''
+  /api/course-files/{id}/:
+    get:
+      operationId: course_files_retrieve
+      description: |-
+        ViewSet for CourseFile model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by course
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course File.
+        required: true
+      tags:
+      - course-files
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseFile'
+          description: ''
+    put:
+      operationId: course_files_update
+      description: |-
+        ViewSet for CourseFile model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by course
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course File.
+        required: true
+      tags:
+      - course-files
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseFile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseFile'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseFile'
+          description: ''
+    patch:
+      operationId: course_files_partial_update
+      description: |-
+        ViewSet for CourseFile model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by course
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course File.
+        required: true
+      tags:
+      - course-files
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseFile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseFile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseFile'
+          description: ''
+    delete:
+      operationId: course_files_destroy
+      description: |-
+        ViewSet for CourseFile model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by course
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course File.
+        required: true
+      tags:
+      - course-files
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/courses/:
+    get:
+      operationId: courses_list
+      description: |-
+        ViewSet for Course model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by academic_year, level, semester
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: query
+        name: academic_year
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: level
+        schema:
+          type: integer
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+        description: |-
+          * `1` - 1
+          * `2` - 2
+          * `3` - 3
+          * `4` - 4
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: semester
+        schema:
+          type: integer
+          enum:
+          - 1
+          - 2
+        description: |-
+          * `1` - 1
+          * `2` - 2
+      tags:
+      - courses
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCourseList'
+          description: ''
+    post:
+      operationId: courses_create
+      description: |-
+        ViewSet for Course model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by academic_year, level, semester
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      tags:
+      - courses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Course'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Course'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+  /api/courses/{id}/:
+    get:
+      operationId: courses_retrieve
+      description: |-
+        ViewSet for Course model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by academic_year, level, semester
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course.
+        required: true
+      tags:
+      - courses
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+    put:
+      operationId: courses_update
+      description: |-
+        ViewSet for Course model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by academic_year, level, semester
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course.
+        required: true
+      tags:
+      - courses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Course'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Course'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+    patch:
+      operationId: courses_partial_update
+      description: |-
+        ViewSet for Course model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by academic_year, level, semester
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course.
+        required: true
+      tags:
+      - courses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCourse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCourse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCourse'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+    delete:
+      operationId: courses_destroy
+      description: |-
+        ViewSet for Course model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by academic_year, level, semester
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Course.
+        required: true
+      tags:
+      - courses
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/elements/:
+    get:
+      operationId: elements_list
+      description: |-
+        ViewSet for Element model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by pointer
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: pointer
+        schema:
+          type: string
+          format: uuid
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - elements
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedElementList'
+          description: ''
+    post:
+      operationId: elements_create
+      description: |-
+        ViewSet for Element model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by pointer
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      tags:
+      - elements
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Element'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Element'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Element'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Element'
+          description: ''
+  /api/elements/{id}/:
+    get:
+      operationId: elements_retrieve
+      description: |-
+        ViewSet for Element model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by pointer
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Element.
+        required: true
+      tags:
+      - elements
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Element'
+          description: ''
+    put:
+      operationId: elements_update
+      description: |-
+        ViewSet for Element model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by pointer
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Element.
+        required: true
+      tags:
+      - elements
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Element'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Element'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Element'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Element'
+          description: ''
+    patch:
+      operationId: elements_partial_update
+      description: |-
+        ViewSet for Element model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by pointer
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Element.
+        required: true
+      tags:
+      - elements
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedElement'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedElement'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedElement'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Element'
+          description: ''
+    delete:
+      operationId: elements_destroy
+      description: |-
+        ViewSet for Element model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by pointer
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Element.
+        required: true
+      tags:
+      - elements
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/pointers/:
+    get:
+      operationId: pointers_list
+      description: |-
+        ViewSet for Pointer model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by standard
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: standard
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - pointers
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPointerList'
+          description: ''
+    post:
+      operationId: pointers_create
+      description: |-
+        ViewSet for Pointer model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by standard
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      tags:
+      - pointers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pointer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pointer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pointer'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pointer'
+          description: ''
+  /api/pointers/{id}/:
+    get:
+      operationId: pointers_retrieve
+      description: |-
+        ViewSet for Pointer model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by standard
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Pointer.
+        required: true
+      tags:
+      - pointers
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pointer'
+          description: ''
+    put:
+      operationId: pointers_update
+      description: |-
+        ViewSet for Pointer model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by standard
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Pointer.
+        required: true
+      tags:
+      - pointers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pointer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pointer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pointer'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pointer'
+          description: ''
+    patch:
+      operationId: pointers_partial_update
+      description: |-
+        ViewSet for Pointer model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by standard
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Pointer.
+        required: true
+      tags:
+      - pointers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPointer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPointer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPointer'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pointer'
+          description: ''
+    delete:
+      operationId: pointers_destroy
+      description: |-
+        ViewSet for Pointer model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by standard
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Pointer.
+        required: true
+      tags:
+      - pointers
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/requests/:
+    get:
+      operationId: requests_list
+      description: |-
+        ViewSet for Request model.
+        Admin: Full CRUD operations, Approve/Reject/Cancel
+        SUPERVISOR/TA: Create if attachment has file and uploader,
+                      Retrieve/List their sent/received requests,
+                      Approve/Reject received requests (if not pending),
+                      Cancel sent requests (if not pending)
+
+        Features:
+        - Filter by status, requester, receiver
+        - Sort by created_at
+        - Search by requester, receiver
+        - Pagination
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: receiver
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: requester
+        schema:
+          type: string
+          format: uuid
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - APPROVED
+          - CANCELED
+          - PENDING
+          - REJECTED
+        description: |-
+          * `PENDING` - Pending
+          * `APPROVED` - Approved
+          * `REJECTED` - Rejected
+          * `CANCELED` - Canceled
+      tags:
+      - requests
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRequestList'
+          description: ''
+    post:
+      operationId: requests_create
+      description: |-
+        ViewSet for Request model.
+        Admin: Full CRUD operations, Approve/Reject/Cancel
+        SUPERVISOR/TA: Create if attachment has file and uploader,
+                      Retrieve/List their sent/received requests,
+                      Approve/Reject received requests (if not pending),
+                      Cancel sent requests (if not pending)
+
+        Features:
+        - Filter by status, requester, receiver
+        - Sort by created_at
+        - Search by requester, receiver
+        - Pagination
+      tags:
+      - requests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Request'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Request'
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Request'
+          description: ''
+  /api/requests/{id}/:
+    get:
+      operationId: requests_retrieve
+      description: |-
+        ViewSet for Request model.
+        Admin: Full CRUD operations, Approve/Reject/Cancel
+        SUPERVISOR/TA: Create if attachment has file and uploader,
+                      Retrieve/List their sent/received requests,
+                      Approve/Reject received requests (if not pending),
+                      Cancel sent requests (if not pending)
+
+        Features:
+        - Filter by status, requester, receiver
+        - Sort by created_at
+        - Search by requester, receiver
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Request.
+        required: true
+      tags:
+      - requests
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestDetail'
+          description: ''
+    put:
+      operationId: requests_update
+      description: |-
+        ViewSet for Request model.
+        Admin: Full CRUD operations, Approve/Reject/Cancel
+        SUPERVISOR/TA: Create if attachment has file and uploader,
+                      Retrieve/List their sent/received requests,
+                      Approve/Reject received requests (if not pending),
+                      Cancel sent requests (if not pending)
+
+        Features:
+        - Filter by status, requester, receiver
+        - Sort by created_at
+        - Search by requester, receiver
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Request.
+        required: true
+      tags:
+      - requests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Request'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Request'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Request'
+          description: ''
+    patch:
+      operationId: requests_partial_update
+      description: |-
+        ViewSet for Request model.
+        Admin: Full CRUD operations, Approve/Reject/Cancel
+        SUPERVISOR/TA: Create if attachment has file and uploader,
+                      Retrieve/List their sent/received requests,
+                      Approve/Reject received requests (if not pending),
+                      Cancel sent requests (if not pending)
+
+        Features:
+        - Filter by status, requester, receiver
+        - Sort by created_at
+        - Search by requester, receiver
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Request.
+        required: true
+      tags:
+      - requests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Request'
+          description: ''
+    delete:
+      operationId: requests_destroy
+      description: |-
+        ViewSet for Request model.
+        Admin: Full CRUD operations, Approve/Reject/Cancel
+        SUPERVISOR/TA: Create if attachment has file and uploader,
+                      Retrieve/List their sent/received requests,
+                      Approve/Reject received requests (if not pending),
+                      Cancel sent requests (if not pending)
+
+        Features:
+        - Filter by status, requester, receiver
+        - Sort by created_at
+        - Search by requester, receiver
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Request.
+        required: true
+      tags:
+      - requests
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/requests/{id}/approve/:
+    post:
+      operationId: requests_approve_create
+      description: |-
+        Approve a request.
+        Only the receiver or admin can approve a request.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Request.
+        required: true
+      tags:
+      - requests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Request'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Request'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Request'
+          description: ''
+  /api/requests/{id}/cancel/:
+    post:
+      operationId: requests_cancel_create
+      description: |-
+        Cancel a request.
+        Only the requester or admin can cancel a request.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Request.
+        required: true
+      tags:
+      - requests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Request'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Request'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Request'
+          description: ''
+  /api/requests/{id}/reject/:
+    post:
+      operationId: requests_reject_create
+      description: |-
+        Reject a request.
+        Only the receiver or admin can reject a request.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Request.
+        required: true
+      tags:
+      - requests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Request'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Request'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Request'
+          description: ''
+  /api/standards/:
+    get:
+      operationId: standards_list
+      description: |-
+        ViewSet for Standard model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by type, academic_year
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: query
+        name: academic_year
+        schema:
+          type: string
+          format: uuid
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: type
+        schema:
+          type: string
+          enum:
+          - ACADEMIC
+          - PRAGMATIC
+        description: |-
+          * `ACADEMIC` - Academic
+          * `PRAGMATIC` - Pragmatic
+      tags:
+      - standards
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedStandardList'
+          description: ''
+    post:
+      operationId: standards_create
+      description: |-
+        ViewSet for Standard model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by type, academic_year
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      tags:
+      - standards
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Standard'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Standard'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Standard'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Standard'
+          description: ''
+  /api/standards/{id}/:
+    get:
+      operationId: standards_retrieve
+      description: |-
+        ViewSet for Standard model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by type, academic_year
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Standard.
+        required: true
+      tags:
+      - standards
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Standard'
+          description: ''
+    put:
+      operationId: standards_update
+      description: |-
+        ViewSet for Standard model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by type, academic_year
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Standard.
+        required: true
+      tags:
+      - standards
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Standard'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Standard'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Standard'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Standard'
+          description: ''
+    patch:
+      operationId: standards_partial_update
+      description: |-
+        ViewSet for Standard model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by type, academic_year
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Standard.
+        required: true
+      tags:
+      - standards
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStandard'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStandard'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStandard'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Standard'
+          description: ''
+    delete:
+      operationId: standards_destroy
+      description: |-
+        ViewSet for Standard model.
+        Admin: Full CRUD operations
+        Others: Read-only access
+
+        Features:
+        - Filter by type, academic_year
+        - Sort by created_at
+        - Search by title
+        - Pagination
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Standard.
+        required: true
+      tags:
+      - standards
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/token/:
+    post:
+      operationId: token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/token/refresh/:
+    post:
+      operationId: token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/users/:
+    get:
+      operationId: users_list
+      description: ViewSet for the User model.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: role
+        schema:
+          type: string
+          enum:
+          - ADMIN
+          - PROFESSOR
+          - SUPERVISOR
+          - TA
+        description: |-
+          * `ADMIN` - Admin
+          * `SUPERVISOR` - Supervisor
+          * `PROFESSOR` - Professor
+          * `TA` - Teaching Assistant
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: users_create
+      description: ViewSet for the User model.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/{id}/:
+    get:
+      operationId: users_retrieve
+      description: ViewSet for the User model.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_update
+      description: ViewSet for the User model.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      description: ViewSet for the User model.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: users_destroy
+      description: ViewSet for the User model.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/me/:
+    get:
+      operationId: users_me_retrieve
+      description: Retrieve the authenticated user's details.
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+components:
+  schemas:
+    AcademicYear:
+      type: object
+      description: Serializer for AcademicYear model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/AcademicYearStatusEnum'
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - end_date
+      - id
+      - start_date
+      - status
+      - updated_at
+    AcademicYearStatusEnum:
+      enum:
+      - ARCHIVED
+      - ACTIVE
+      type: string
+      description: |-
+        * `ARCHIVED` - Archived
+        * `ACTIVE` - Active
+    Attachment:
+      type: object
+      description: Serializer for Attachment model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        file:
+          type: string
+          format: uri
+        element:
+          type: string
+          format: uuid
+        uploaded_by:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        shared_with:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          readOnly: true
+        shared_with_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
+        uploaded_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - element
+      - id
+      - shared_with
+      - updated_at
+      - uploaded_at
+      - uploaded_by
+    Course:
+      type: object
+      description: Serializer for Course model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 50
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        semester:
+          allOf:
+          - $ref: '#/components/schemas/SemesterEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        credit_hours:
+          allOf:
+          - $ref: '#/components/schemas/CreditHoursEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        academic_year:
+          type: string
+          format: uuid
+        professor:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        professor_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - academic_year
+      - code
+      - created_at
+      - credit_hours
+      - id
+      - level
+      - professor
+      - semester
+      - title
+      - updated_at
+    CourseAttachment:
+      type: object
+      description: Serializer for CourseAttachment model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        course_file:
+          type: string
+          format: uuid
+        file:
+          type: string
+          format: uri
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - course_file
+      - created_at
+      - file
+      - id
+      - updated_at
+    CourseFile:
+      type: object
+      description: Serializer for CourseFile model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        course:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - course
+      - created_at
+      - id
+      - title
+      - updated_at
+    CreditHoursEnum:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: |-
+        * `0` - 0
+        * `1` - 1
+        * `2` - 2
+        * `3` - 3
+        * `4` - 4
+    Element:
+      type: object
+      description: Serializer for Element model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        pointer:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - pointer
+      - title
+      - updated_at
+    LevelEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: |-
+        * `1` - 1
+        * `2` - 2
+        * `3` - 3
+        * `4` - 4
+    PaginatedAcademicYearList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AcademicYear'
+    PaginatedAttachmentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+    PaginatedCourseAttachmentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CourseAttachment'
+    PaginatedCourseFileList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CourseFile'
+    PaginatedCourseList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+    PaginatedElementList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Element'
+    PaginatedPointerList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pointer'
+    PaginatedRequestList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Request'
+    PaginatedStandardList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Standard'
+    PaginatedUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PatchedAcademicYear:
+      type: object
+      description: Serializer for AcademicYear model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/AcademicYearStatusEnum'
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedAttachment:
+      type: object
+      description: Serializer for Attachment model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        file:
+          type: string
+          format: uri
+        element:
+          type: string
+          format: uuid
+        uploaded_by:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        shared_with:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          readOnly: true
+        shared_with_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
+        uploaded_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedCourse:
+      type: object
+      description: Serializer for Course model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 50
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        semester:
+          allOf:
+          - $ref: '#/components/schemas/SemesterEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        credit_hours:
+          allOf:
+          - $ref: '#/components/schemas/CreditHoursEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        academic_year:
+          type: string
+          format: uuid
+        professor:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        professor_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedCourseAttachment:
+      type: object
+      description: Serializer for CourseAttachment model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        course_file:
+          type: string
+          format: uuid
+        file:
+          type: string
+          format: uri
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedCourseFile:
+      type: object
+      description: Serializer for CourseFile model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        course:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedElement:
+      type: object
+      description: Serializer for Element model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        pointer:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedPointer:
+      type: object
+      description: Serializer for Pointer model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        standard:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedRequest:
+      type: object
+      description: Serializer for Request model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        requester:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        receiver:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        made_on:
+          type: string
+          format: uuid
+          nullable: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status49aEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedStandard:
+      type: object
+      description: Serializer for Standard model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        academic_year:
+          type: string
+          format: uuid
+        assigned_to:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          readOnly: true
+        assigned_to_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedUser:
+      type: object
+      description: Serializer for the User model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+    Pointer:
+      type: object
+      description: Serializer for Pointer model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        standard:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - standard
+      - title
+      - updated_at
+    Request:
+      type: object
+      description: Serializer for Request model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        requester:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        receiver:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        made_on:
+          type: string
+          format: uuid
+          nullable: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status49aEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - receiver
+      - requester
+      - status
+      - updated_at
+    RequestDetail:
+      type: object
+      description: Detailed serializer for Request model with attachment details.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        requester:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        receiver:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        made_on:
+          allOf:
+          - $ref: '#/components/schemas/Attachment'
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status49aEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - made_on
+      - receiver
+      - requester
+      - status
+      - updated_at
+    RoleEnum:
+      enum:
+      - ADMIN
+      - SUPERVISOR
+      - PROFESSOR
+      - TA
+      type: string
+      description: |-
+        * `ADMIN` - Admin
+        * `SUPERVISOR` - Supervisor
+        * `PROFESSOR` - Professor
+        * `TA` - Teaching Assistant
+    SemesterEnum:
+      enum:
+      - 1
+      - 2
+      type: integer
+      description: |-
+        * `1` - 1
+        * `2` - 2
+    Standard:
+      type: object
+      description: Serializer for Standard model.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        academic_year:
+          type: string
+          format: uuid
+        assigned_to:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          readOnly: true
+        assigned_to_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - academic_year
+      - assigned_to
+      - created_at
+      - id
+      - title
+      - type
+      - updated_at
+    Status49aEnum:
+      enum:
+      - PENDING
+      - APPROVED
+      - REJECTED
+      - CANCELED
+      type: string
+      description: |-
+        * `PENDING` - Pending
+        * `APPROVED` - Approved
+        * `REJECTED` - Rejected
+        * `CANCELED` - Canceled
+    TokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - email
+      - password
+      - refresh
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TypeEnum:
+      enum:
+      - ACADEMIC
+      - PRAGMATIC
+      type: string
+      description: |-
+        * `ACADEMIC` - Academic
+        * `PRAGMATIC` - Pragmatic
+    User:
+      type: object
+      description: Serializer for User model (minimal version for nested relationships).
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+      required:
+      - id
+      - username
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
