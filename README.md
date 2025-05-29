@@ -60,18 +60,14 @@ To get the project running on your local machine, follow these steps:
 3.  **Set up environment variables:**
     Create a `.env.local` file in the project root and add necessary environment variables, such as API endpoints or authentication details. Consult the project's documentation or ask the developer for required variables.
     ```env
-    # Example environment variable
+    #  environment variable
     NEXT_PUBLIC_API_URL=http://localhost:8000/api
     ```
 
 4.  **Run the development server:**
     ```bash
     npm run dev
-    # or
-    yarn dev
-    # or
-    pnpm dev
-    ```
+   
 
 5.  **Access the application:**
     Open your web browser and go to `http://localhost:3000` (or the port indicated in your terminal). 
